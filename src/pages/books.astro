@@ -1,0 +1,268 @@
+---
+import '../styles/editorial.css';
+import { siteConfig } from '../data/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = base || '/';
+const faviconHref = `${base}/favicon.svg`;
+
+const hasPurchaseUrl = siteConfig.textbook.purchaseUrl.trim().length > 0;
+const hasOpenChat = siteConfig.contact.kakaoOpenChatUrl.trim().length > 0;
+
+const bookJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: siteConfig.textbook.title,
+  author: {
+    '@type': 'Person',
+    name: siteConfig.authorName,
+  },
+  description: siteConfig.textbook.notice,
+};
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>교재 안내 | {siteConfig.brandName}</title>
+    <meta name="description" content={siteConfig.textbook.subtitle} />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+KR:wght@400;600;700&display=swap"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(bookJsonLd)} />
+  </head>
+
+  <body>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href={homeHref} class="brand-mark">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span>{siteConfig.brandName}</span>
+        </a>
+        <div class="header-actions">
+          <a href={homeHref} class="header-link">과외 프로필</a>
+          <button type="button" class="btn-primary" data-open-consult>
+            상담 요청
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-band">
+      <div class="shell hero-grid">
+        <div class="hero-main">
+          <span class="hero-kicker">자체 제작 기출 해설서 · 수강생 무료 제공</span>
+          <h1 class="hero-headline">{siteConfig.textbook.title}</h1>
+          <p class="hero-lead">{siteConfig.textbook.notice}</p>
+          <div class="hero-actions">
+            {
+              hasPurchaseUrl ? (
+                <a
+                  href={siteConfig.textbook.purchaseUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-primary"
+                >
+                  교재 구매 ({siteConfig.textbook.priceSale})
+                </a>
+              ) : (
+                <a
+                  href={`sms:${siteConfig.contact.phone}?body=교재 구매 문의드립니다.`}
+                  class="btn-primary"
+                >
+                  문자로 교재 문의 ({siteConfig.textbook.priceSale})
+                </a>
+              )
+            }
+            <a href={homeHref} class="btn-secondary">과외 프로필 보기</a>
+          </div>
+        </div>
+
+        <aside class="hero-board" aria-label="도서 정보 요약">
+          <div class="board-header">
+            <span>교재 사양</span>
+            <span class="mono" style="color: var(--color-accent);">EDITION</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-key">수강생 혜택</span>
+            <span class="fact-val">비대면 1:1 과외 진행 시 무료 제공</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-key">별도 구매가</span>
+            <span class="fact-val tabular">
+              <span style="text-decoration: line-through; color: var(--color-muted-foreground); margin-right: 8px;">
+                {siteConfig.textbook.priceOriginal}
+              </span>
+              <strong style="color: var(--color-accent);">{siteConfig.textbook.priceSale}</strong>
+            </span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-key">수록 범위</span>
+            <span class="fact-val">{siteConfig.textbook.targetScope}</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-key">문항 구성</span>
+            <span class="fact-val">{siteConfig.textbook.subtitle}</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-key">상담 시간</span>
+            <span class="fact-val">{siteConfig.contact.consultHours}</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <main class="shell" style="padding-block: 56px 88px;">
+      <div class="book-grid">
+        <div>
+          <div class="book-cover" role="img" aria-label="평가원 4점 기출 5단계 해설서 표지">
+            <div>
+              <div class="book-cover-tag">자체 제작 기출 해설서</div>
+              <h2 class="book-cover-title">
+                평가원 4점 기출<br />
+                5단계 해설서
+              </h2>
+              <p class="book-cover-sub">
+                대수(수학Ⅰ) · 미적분Ⅰ(수학Ⅱ) · 확률과 통계<br />
+                교육청 및 기출 변형 문항 지속 업데이트 중
+              </p>
+            </div>
+            <div class="book-cover-foot">
+              <span>문항당 2–4p 상세 전개</span>
+              <span class="tabular">{siteConfig.textbook.priceSale}</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span class="section-index">교재 구성 원칙</span>
+          <h2 class="section-title">“자명하게 ~이므로”를 지운 5단계 생각의 순서</h2>
+          <p class="section-intro">
+            시중 해설지는 정답까지 가는 계산 과정만 적혀 있어 혼자 복습할 때 “왜 여기서 이 식을 쓰는지”가 보이지 않습니다.
+            본 교재는 모든 문항을 수업과 동일한 5단계 순서로 풀어내어, 수업 후 혼자 복습할 때도 같은 사고 흐름을 따라갈 수 있게 구성했습니다.
+          </p>
+
+          <div class="ledger-box">
+            <div class="ledger-row">
+              <span class="ledger-key">5단계 해설 구조</span>
+              <span class="ledger-val">
+                ① 목적 파악 → ② 조건 구성 요소 분석 → ③ 접근 방향 확정 → ④ 식 정리 및 답 도출 → ⑤ 판별 및 정답
+              </span>
+            </div>
+            <div class="ledger-row">
+              <span class="ledger-key">문항당 분량</span>
+              <span class="ledger-val">생각 과정 생략 없이 문항당 2–4페이지 상세 기술</span>
+            </div>
+            <div class="ledger-row">
+              <span class="ledger-key">업데이트 범위</span>
+              <span class="ledger-val">2022 개정 수능 범위 평가원 4점 기출 기반 · 교육청 및 기출 변형 문항 지속 업데이트 중</span>
+            </div>
+            <div class="ledger-row">
+              <span class="ledger-key">배송 / 발송</span>
+              <span class="ledger-val">{siteConfig.textbook.shipping}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="shell">
+        <div class="footer-grid">
+          <div>
+            <h2 class="footer-title">{siteConfig.brandName}</h2>
+            <p class="footer-desc">
+              교재 별도 구매 또는 비대면 1:1 수업 상담이 필요하시면 아래로 편하게 연락해 주세요.
+            </p>
+            <div class="hero-actions">
+              <button type="button" class="btn-primary" data-open-consult>상담 요청</button>
+              <a href={homeHref} class="btn-secondary">과외 프로필 보기</a>
+            </div>
+          </div>
+          <div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">연락처</span>
+              <span class="footer-meta-val tabular">
+                <a href={`tel:${siteConfig.contact.phone}`}>{siteConfig.contact.phone}</a>
+              </span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">상담 시간</span>
+              <span class="footer-meta-val">{siteConfig.contact.consultHours}</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 {siteConfig.brandName}. All rights reserved.</span>
+          <span>{siteConfig.textbook.title}</span>
+        </div>
+      </div>
+    </footer>
+
+    <dialog id="consult-dialog" class="consult-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-head">
+        <strong id="dialog-title" style="font-size: 1.08rem;">상담 요청 안내</strong>
+        <button type="button" class="dialog-close" data-close-consult>닫기</button>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--color-secondary); margin: 0 0 14px;">
+        편하신 방법으로 연락 주시면 확인 후 바로 답변드립니다. ({siteConfig.contact.consultHours})
+      </p>
+      <a
+        href={siteConfig.contact.kakaoOpenChatUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+        style="width: 100%; margin-bottom: 14px;"
+      >
+        카카오톡 오픈채팅 바로 가기 ↗
+      </a>
+      <div class="ledger-box" style="margin-top: 0; margin-bottom: 14px;">
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">카톡 ID</span>
+          <span class="ledger-val"><strong>{siteConfig.contact.kakaoId}</strong></span>
+        </div>
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">전화 · 문자</span>
+          <span class="ledger-val tabular">{siteConfig.contact.phone}</span>
+        </div>
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">이메일</span>
+          <span class="ledger-val">{siteConfig.contact.email}</span>
+        </div>
+      </div>
+      <div class="hero-actions" style="grid-template-columns: 1fr 1fr; max-width: 100%;">
+        <a href={`sms:${siteConfig.contact.phone}`} class="btn-secondary">문자 보내기</a>
+        <a href={`tel:${siteConfig.contact.phone}`} class="btn-secondary">바로 전화하기</a>
+      </div>
+    </dialog>
+
+    <script>
+      const dialog = document.getElementById('consult-dialog') as HTMLDialogElement | null;
+      document.querySelectorAll('[data-open-consult]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          if (dialog) {
+            e.preventDefault();
+            dialog.showModal();
+          }
+        });
+      });
+      document.querySelectorAll('[data-close-consult]').forEach((el) => {
+        el.addEventListener('click', () => dialog?.close());
+      });
+      dialog?.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+    </script>
+  </body>
+</html>

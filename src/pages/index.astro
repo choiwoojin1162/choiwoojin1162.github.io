@@ -1,0 +1,718 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/editorial.css';
+import {
+  siteConfig,
+  teacherTimeline,
+  proofCases,
+  reviews,
+  kakaoShowcase,
+  curriculumSteps,
+  shortCourseTracks,
+  tuitionRows,
+  operationNotes,
+} from '../data/site';
+import { renderMath } from '../utils/math';
+import MathFlowDiagram from '../components/MathFlowDiagram.astro';
+import RemoteSetupDiagram from '../components/RemoteSetupDiagram.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = base || '/';
+const booksHref = `${base}/books`;
+const faviconHref = `${base}/favicon.svg`;
+const heroBgStyle = `--hero-bg-image: url('${base}/images/hero-studio-bg.jpg')`;
+
+const hasOpenChat = siteConfig.contact.kakaoOpenChatUrl.trim().length > 0;
+
+const mathN = renderMath('n');
+const mathNMinus1 = renderMath('n-1');
+const math1 = renderMath('1');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: siteConfig.brandName,
+      description: siteConfig.description,
+    },
+    {
+      '@type': 'Person',
+      name: siteConfig.authorName,
+      alternateName: siteConfig.brandName,
+      description: siteConfig.affiliation,
+      telephone: siteConfig.contact.phone,
+    },
+    {
+      '@type': 'Service',
+      name: '비대면 1:1 수능 수학 과외',
+      provider: {
+        '@type': 'Person',
+        name: siteConfig.authorName,
+      },
+      areaServed: 'KR',
+      description: siteConfig.description,
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{siteConfig.brandName} | 비대면 1:1 수능 수학 과외</title>
+    <meta name="description" content={siteConfig.description} />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <!-- Minimal Masthead -->
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href={homeHref} class="brand-mark">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span>{siteConfig.brandName}</span>
+        </a>
+
+        <div class="header-actions">
+          <a href={booksHref} class="header-link">교재 안내</a>
+          <button type="button" class="btn-primary" data-open-consult>
+            상담 요청
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero: Clean White + Kimstudy Card Backdrop + Mint Trust Verification Pill + 3 Equal CTA Blocks -->
+    <section class="hero-band hero-band--card-bg" style={heroBgStyle}>
+      <div class="shell hero-grid hero-grid--single">
+        <div class="hero-main">
+          <div class="hero-trust-pill">
+            <span>✓ 비대면 1:1 화상 수업 · 한양대(서울) 기계공학부 25학번 · 수리논술 최초합</span>
+          </div>
+          <h1 class="hero-headline">
+            공부량을 늘리기 전에,<br />
+            문제를 보는 순서부터 바꿉니다.
+          </h1>
+          <p class="hero-lead">
+            3~5등급 정체의 원인은 양이 아니라 순서입니다. 구글 미트·굿노트 실시간 동시 편집으로 손풀이 습관을 바로잡습니다.
+          </p>
+          <div class="hero-actions">
+            <button type="button" class="hero-action-block is-primary" data-open-consult>
+              상담 요청
+            </button>
+            <a href={booksHref} class="hero-action-block is-secondary">
+              교재 안내
+            </a>
+            <a
+              href="https://kimstudy.com/tutor/s/5bb888b9-b1a1-4cc0-98eb-6cdac0f45fcd?O3WRXJQK9E=B8882AQA1"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hero-action-block is-secondary"
+            >
+              김과외 프로필 ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main 2-Column Layout: Left Sticky Rail (3col) / Right Modular Content (9col) -->
+    <div class="shell content-layout">
+      <aside class="sticky-rail" aria-label="섹션 목차 및 안내">
+        <div class="rail-nav-box">
+          <p class="rail-title">섹션 목차</p>
+          <nav class="rail-nav">
+            <a href="#story" class="rail-link is-active" data-section-link="story">
+              <span class="rail-num">01</span>
+              <span>강사 소개</span>
+            </a>
+            <a href="#method" class="rail-link" data-section-link="method">
+              <span class="rail-num">02</span>
+              <span>수업 방식과 풀이 기준</span>
+            </a>
+            <a href="#proof" class="rail-link" data-section-link="proof">
+              <span class="rail-num">03</span>
+              <span>검증된 성과와 후기</span>
+            </a>
+            <a href="#curriculum" class="rail-link" data-section-link="curriculum">
+              <span class="rail-num">04</span>
+              <span>커리큘럼과 단기 특강</span>
+            </a>
+            <a href="#tuition" class="rail-link" data-section-link="tuition">
+              <span class="rail-num">05</span>
+              <span>수업료와 운영 기준</span>
+            </a>
+          </nav>
+        </div>
+
+        <div class="rail-note" aria-label="수업 및 상담 기준 정보">
+          <div class="rail-note-title">
+            <span>수업 및 상담 안내</span>
+            <span class="rail-verified-tag">인증 완료</span>
+          </div>
+          <div class="rail-info-list">
+            <div class="rail-info-item">
+              <span class="rail-info-label">소속</span>
+              <span class="rail-info-value">한양대(서울) 기계공학부 25학번 · 논술 최초합</span>
+            </div>
+            <div class="rail-info-item">
+              <span class="rail-info-label">지도 대상</span>
+              <span class="rail-info-value">예비 고2·고2·고3·N수 (대수·미적분Ⅰ·확통)</span>
+            </div>
+            <div class="rail-info-item">
+              <span class="rail-info-label">수업 방식</span>
+              <span class="rail-info-value">비대면 1:1 화상 (구글 미트 + 굿노트)</span>
+            </div>
+            <div class="rail-info-item">
+              <span class="rail-info-label">자체 교재</span>
+              <span class="rail-info-value">평가원 4점 기출 5단계 해설서 무료 제공</span>
+            </div>
+            <div class="rail-info-item">
+              <span class="rail-info-label">상담 시간</span>
+              <span class="rail-info-value">{siteConfig.contact.consultHours}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-column">
+        <!-- 01 -->
+        <section id="story" class="chapter">
+          <div style="margin-bottom: 20px;">
+            <span class="section-index">01 · 강사 소개</span>
+            <h2 class="section-title">직접 실패해 보았기에 정체된 학생의 막막함을 압니다</h2>
+            <p class="section-intro" style="margin-bottom: 14px;">
+              회독 수만 쌓던 시절에서 벗어나 생각의 순서를 세운 뒤, 2년 공백을 딛고 수능 미적분 1등급과 수리논술 최초 합격을 이뤄냈습니다.
+            </p>
+            <span class="premium-class-badge">✓ 김과외 Premium Class 선생님 · 전국 상위 2% 이내</span>
+          </div>
+
+          <div class="journey-grid">
+            {
+              teacherTimeline.map((item) => (
+                <article class={`journey-card ${item.highlight ? 'is-highlight' : ''}`}>
+                  <span class="journey-tag">{item.tag}</span>
+                  <h3 class="journey-title">{item.title}</h3>
+                  <p class="journey-desc">{item.body}</p>
+                </article>
+              ))
+            }
+          </div>
+
+          <blockquote class="pull-quote">
+            “양을 늘리기 전에 방법과 목적, 생각의 순서부터 바로잡으면 적은 학습량으로도 성적이 바뀝니다.”
+          </blockquote>
+        </section>
+
+        <!-- 02 -->
+        <section id="method" class="chapter">
+          <span class="section-index">02 · 수업 방식과 풀이 기준</span>
+          <h2 class="section-title">모든 문제를 같은 순서로 풉니다</h2>
+          <p class="section-intro">
+            3점부터 22번 킬러까지 동일한 기준으로 접근하며, 패드 1대 동시 편집으로 손풀이 중간에 즉시 개입합니다.
+          </p>
+
+          <div class="method-protocol-grid">
+            <article class="protocol-card">
+              <div class="protocol-card-head">
+                <span class="protocol-step-badge">STEP 01</span>
+                <span class="protocol-phase">끝점 확인</span>
+              </div>
+              <h3 class="protocol-title">목적 파악</h3>
+              <p class="protocol-desc">
+                식부터 적지 않고 문제에서 구해야 할 최종 목적 1개를 먼저 확정합니다.
+              </p>
+              <div class="protocol-action">↳ 구할 대상 먼저 고정</div>
+            </article>
+
+            <article class="protocol-card">
+              <div class="protocol-card-head">
+                <span class="protocol-step-badge">STEP 02</span>
+                <span class="protocol-phase">단서 분해</span>
+              </div>
+              <h3 class="protocol-title">조건 구성 요소 분석</h3>
+              <p class="protocol-desc">
+                주어진 조건을 쪼개어 확정된 수치와 구할 미지수의 역할을 분리합니다.
+              </p>
+              <div class="protocol-action">↳ 조건별 역할 분류</div>
+            </article>
+
+            <article class="protocol-card">
+              <div class="protocol-card-head">
+                <span class="protocol-step-badge">STEP 03</span>
+                <span class="protocol-phase">짝맞춤 선택</span>
+              </div>
+              <h3 class="protocol-title">공식 선택 기준</h3>
+              <p class="protocol-desc">
+                요소 <span set:html={mathN} />개 중 조건 <span set:html={mathNMinus1} />개가 맞은 공식을 선택합니다. 남은 <span set:html={math1} />개가 목적입니다.
+              </p>
+              <div class="protocol-action">↳ 암기 대입 금지</div>
+            </article>
+          </div>
+
+          <MathFlowDiagram />
+          <RemoteSetupDiagram />
+
+          <div class="split-2col">
+            <div class="info-box">
+              <h3>오답 원인 3분류</h3>
+              <div class="chip-list">
+                <span class="reason-chip">① 사고 순서 부재</span>
+                <span class="reason-chip">② 개념·전제 착각</span>
+                <span class="reason-chip">③ 조건·목적 오독</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <h3>실수 원인 3분류</h3>
+              <div class="chip-list">
+                <span class="reason-chip">① 연습 부족 (인지 부하)</span>
+                <span class="reason-chip">② 검토·시간 배분 부재</span>
+                <span class="reason-chip">③ 안 좋은 습관</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03 -->
+        <section id="proof" class="chapter">
+          <span class="section-index">03 · 검증된 성과와 후기</span>
+          <h2 class="section-title">생각의 순서를 교정한 실제 결과입니다</h2>
+          <p class="section-intro">
+            김과외 누적 정규 성사 10건 및 인증 후기 8건 전원 5.0 만점 기록으로 검증된 실제 변화입니다.
+          </p>
+
+          <div class="case-grid">
+            {
+              proofCases.map((item) => (
+                <article class="case-card">
+                  <div class="case-meta">
+                    <span class="case-badge">CASE {item.id} · {item.student}</span>
+                    <span class="case-period">{item.period}</span>
+                  </div>
+                  <div class="case-result">{item.after}</div>
+                  <div class="case-before">수업 전: {item.before}</div>
+                </article>
+              ))
+            }
+          </div>
+
+          <div class="review-section-head">
+            <h3>김과외 인증 후기</h3>
+            <span class="review-sub-note">전체 8건 전원 5.0 만점</span>
+          </div>
+
+          <div class="review-list" id="reviews-list">
+            {
+              reviews.map((r, idx) => (
+                <article class={`review-card ${idx >= 3 ? 'is-extra' : ''}`}>
+                  <div class="review-head">
+                    <span class="review-author">{r.author}</span>
+                    <span class="review-rating-pill tabular">★★★★★ {r.score}</span>
+                  </div>
+                  <span class="review-meta-chip">{r.meta}</span>
+                  <p class="review-body">“{r.content}”</p>
+                </article>
+              ))
+            }
+          </div>
+
+          <button type="button" class="reviews-toggle-btn" id="reviews-toggle-btn" aria-expanded="false">
+            <span>인증 후기 5건 더보기 (전체 8건)</span>
+            <span class="reviews-toggle-indicator">+ 펼쳐보기</span>
+          </button>
+
+          <!-- 카카오톡 실제 피드백 모음 박스 (과외 리뷰 폴더 추출 · 익명 요약) -->
+          <div class="kakao-feedback-section">
+            <div class="kakao-section-header">
+              <div class="kakao-section-title">
+                <span class="kakao-yellow-badge">TALK</span>
+                <span>수업 성과 · 카카오톡 피드백 모음</span>
+              </div>
+              <span style="font-size: 0.75rem; color: var(--color-muted-foreground);">실제 성적·후기 발췌 (익명)</span>
+            </div>
+
+            <div class="kakao-dialog-grid">
+              {
+                kakaoShowcase.map((k) => (
+                  <div class="kakao-chat-card">
+                    <div class="kakao-chat-meta">
+                      <span>{k.sender}</span>
+                    </div>
+                    {k.image ? (
+                      <img src={k.image} alt={k.sender} style="width: 100%; border-radius: 6px;" />
+                    ) : (
+                      <div class="kakao-bubble">{k.message}</div>
+                    )}
+                    <div class="kakao-chat-highlight">✓ {k.tag}</div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 -->
+        <section id="curriculum" class="chapter">
+          <span class="section-index">04 · 커리큘럼과 단기 특강</span>
+          <h2 class="section-title">4단계 커리큘럼과 9개 소단원 특강</h2>
+          <p class="section-intro">
+            3개월 태도 교정을 목표로 하며, 시범 과외나 단원별 단기 특강(2~4회)으로 먼저 검증 후 정규 수업으로 이어갈 수 있습니다.
+          </p>
+
+          <div class="curriculum-grid">
+            {
+              curriculumSteps.map((c) => (
+                <div class="curriculum-cell">
+                  <div class="curriculum-step">STEP {c.step}</div>
+                  <h3>{c.title}</h3>
+                  <div class="curriculum-book">{c.book}</div>
+                  <p>{c.detail}</p>
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- 단원별 단기 특강 줄글 안내 -->
+          <div class="tracks-prose" aria-label="단원별 단기 특강 9개 소단원">
+            <p class="tracks-prose-lead">
+              <strong>단원별 단기 특강(9개 소단원):</strong>
+              {shortCourseTracks.map((t, i) => (
+                <span>
+                  <strong>{t.subject}</strong> {t.units.join(' · ')}{i < shortCourseTracks.length - 1 ? ' / ' : ''}
+                </span>
+              ))}
+              중 필요한 단원을 선택해 집중 교정할 수 있습니다.
+            </p>
+          </div>
+
+          <!-- 1회 120분 구성 시각화 바 (10분 / 50분 / 50분 / 10분) -->
+          <div class="lesson-flow-card">
+            <div class="lesson-flow-head">
+              <span>1회 120분 수업 흐름</span>
+              <span style="font-size: 0.78rem; color: var(--color-accent);">녹화 미제공 · 수업 직후 핵심 정리 공유</span>
+            </div>
+            <div class="lesson-flow-bar">
+              <div class="flow-seg"><strong>10분</strong><span>숙제 점검</span></div>
+              <div class="flow-seg is-core"><strong>50분</strong><span>개념 설명 및 풀이</span></div>
+              <div class="flow-seg is-core"><strong>50분</strong><span>학생 풀이 피드백</span></div>
+              <div class="flow-seg"><strong>10분</strong><span>과제</span></div>
+            </div>
+          </div>
+
+          <div class="textbook-inline-bar">
+            <span>
+              <strong>자체 제작 교재 무료:</strong> {siteConfig.textbook.title} ({siteConfig.textbook.subtitle})
+            </span>
+            <a href={booksHref} class="textbook-inline-link">교재 상세 보기 →</a>
+          </div>
+        </section>
+
+        <!-- 05 -->
+        <section id="tuition" class="chapter">
+          <span class="section-index">05 · 수업료와 운영 기준</span>
+          <h2 class="section-title">수업료 및 진행 규정</h2>
+          <p class="section-intro">
+            모든 수학 수업은 시간당 50,000원(1회 120분) 고정이며, 시범 과외는 1시간 30,000원입니다.
+          </p>
+
+          <div class="table-wrap">
+            <table class="tuition-table">
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>대상 및 구성</th>
+                  <th>단위</th>
+                  <th>수업료</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  tuitionRows.map((row) => (
+                    <tr>
+                      <td>
+                        <span class="tuition-name">{row.name}</span>
+                      </td>
+                      <td>
+                        <span>{row.target}</span>
+                        <span class="tuition-sub">{row.note}</span>
+                      </td>
+                      <td class="tabular">{row.unit}</td>
+                      <td>
+                        <span class="tuition-price tabular">{row.price}</span>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-cards-grid">
+            {
+              operationNotes.map((note) => (
+                <div class="spec-card">
+                  <h3 class="spec-card-title">{note.key}</h3>
+                  <p class="spec-card-body">{note.value}</p>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="refund-policy-box" aria-label="환불 및 일정 변경 규정">
+            <h3 class="refund-policy-title">환불 및 일정 변경 규정</h3>
+            <ul class="refund-policy-list">
+              <li>수업 일정 변경·취소는 <strong>전날 밤 10시(22:00)까지</strong> 말씀해 주셔야 당일 회차 <strong>100% 환불</strong>이 가능합니다.</li>
+              <li>비대면 수업을 위한 <strong>태블릿(아이패드) 및 굿노트 앱 구매 비용은 개인 준비 비용으로 별도 환불 대상이 아닙니다.</strong></li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="shell">
+        <div class="footer-grid">
+          <div>
+            <h2 class="footer-title">{siteConfig.brandName}</h2>
+            <p class="footer-desc">
+              현재 학년·모의고사 등급·막히는 단원을 알려 주시면 시범 또는 단기·정규 방향을 안내해 드립니다.
+            </p>
+            <div class="hero-actions">
+              <button type="button" class="hero-action-block is-primary" data-open-consult>
+                상담 요청
+              </button>
+              <a href={booksHref} class="hero-action-block is-secondary">교재 안내</a>
+              <a
+                href="https://kimstudy.com/tutor/s/5bb888b9-b1a1-4cc0-98eb-6cdac0f45fcd?O3WRXJQK9E=B8882AQA1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hero-action-block is-secondary"
+              >
+                김과외 프로필 ↗
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">연락처</span>
+              <span class="footer-meta-val tabular">
+                <a href={`tel:${siteConfig.contact.phone}`}>{siteConfig.contact.phone}</a>
+              </span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">카카오톡</span>
+              <span class="footer-meta-val">
+                ID: {siteConfig.contact.kakaoId} ·{' '}
+                <a
+                  href={siteConfig.contact.kakaoOpenChatUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="color: var(--color-accent); font-weight: 600;"
+                >
+                  오픈채팅 ↗
+                </a>
+              </span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">이메일</span>
+              <span class="footer-meta-val">
+                <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
+              </span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">상담 시간</span>
+              <span class="footer-meta-val">{siteConfig.contact.consultHours}</span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">수업 시간</span>
+              <span class="footer-meta-val">{siteConfig.contact.lessonHours}</span>
+            </div>
+            <div class="footer-meta-row">
+              <span class="footer-meta-key">진행 방식</span>
+              <span class="footer-meta-val">{siteConfig.contact.mode}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>© 2026 {siteConfig.brandName}. All rights reserved.</span>
+          <span>{siteConfig.affiliation}</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Sticky Bottom CTA Bar (Kimstudy Atmosphere) -->
+    <div class="mobile-sticky-cta" aria-label="모바일 빠른 상담 바">
+      <a href={booksHref} class="btn-secondary">교재 안내</a>
+      <button type="button" class="btn-primary" data-open-consult>
+        상담 요청
+      </button>
+    </div>
+
+    <!-- Consultation Modal -->
+    <dialog id="consult-dialog" class="consult-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-head">
+        <strong id="dialog-title" style="font-size: 1.08rem;">상담 요청 안내</strong>
+        <button type="button" class="dialog-close" data-close-consult>닫기</button>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--color-secondary); margin: 0 0 14px;">
+        편하신 방법으로 연락 주시면 확인 후 바로 답변드립니다. (매일 09:00 – 22:30)
+      </p>
+
+      <a
+        href={siteConfig.contact.kakaoOpenChatUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+        style="width: 100%; margin-bottom: 14px;"
+      >
+        카카오톡 오픈채팅 바로 가기 ↗
+      </a>
+
+      <div class="ledger-box" style="margin-top: 0; margin-bottom: 14px;">
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">카톡 ID</span>
+          <span class="ledger-val" style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <strong>{siteConfig.contact.kakaoId}</strong>
+            <button
+              type="button"
+              id="copy-kakao-btn"
+              data-kakao={siteConfig.contact.kakaoId}
+              style="font-size: 0.76rem; padding: 3px 9px; border-radius: 4px; border: 1px solid var(--color-border-strong); background: var(--color-muted); cursor: pointer; font-weight: 600;"
+            >
+              ID 복사
+            </button>
+          </span>
+        </div>
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">전화 · 문자</span>
+          <span class="ledger-val tabular" style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <a href={`tel:${siteConfig.contact.phone}`} style="color: var(--color-accent); font-weight: 700;">
+              {siteConfig.contact.phone}
+            </a>
+            <button
+              type="button"
+              id="copy-phone-btn"
+              data-phone={siteConfig.contact.phone}
+              style="font-size: 0.76rem; padding: 3px 9px; border-radius: 4px; border: 1px solid var(--color-border-strong); background: var(--color-muted); cursor: pointer; font-weight: 600;"
+            >
+              번호 복사
+            </button>
+          </span>
+        </div>
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">이메일</span>
+          <span class="ledger-val">
+            <a href={`mailto:${siteConfig.contact.email}`} style="color: var(--color-secondary);">
+              {siteConfig.contact.email}
+            </a>
+          </span>
+        </div>
+        <div class="ledger-row" style="grid-template-columns: 92px 1fr;">
+          <span class="ledger-key">남기실 내용</span>
+          <span class="ledger-val">학년 / 최근 등급 / 막히는 단원</span>
+        </div>
+      </div>
+
+      <div class="hero-actions" style="grid-template-columns: 1fr 1fr; max-width: 100%;">
+        <a href={`sms:${siteConfig.contact.phone}`} class="btn-secondary">문자 보내기</a>
+        <a href={`tel:${siteConfig.contact.phone}`} class="btn-secondary">바로 전화하기</a>
+      </div>
+    </dialog>
+
+    <script>
+      const dialog = document.getElementById('consult-dialog') as HTMLDialogElement | null;
+      document.querySelectorAll('[data-open-consult]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          if (dialog) {
+            e.preventDefault();
+            dialog.showModal();
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-close-consult]').forEach((el) => {
+        el.addEventListener('click', () => dialog?.close());
+      });
+
+      dialog?.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+
+      const copyBtn = document.getElementById('copy-phone-btn');
+      copyBtn?.addEventListener('click', async () => {
+        const phone = copyBtn.getAttribute('data-phone') ?? '';
+        if (!phone) return;
+        try {
+          await navigator.clipboard.writeText(phone);
+          copyBtn.textContent = '복사 완료';
+        } catch {
+          copyBtn.textContent = phone;
+        }
+      });
+
+      const copyKakaoBtn = document.getElementById('copy-kakao-btn');
+      copyKakaoBtn?.addEventListener('click', async () => {
+        const kakaoId = copyKakaoBtn.getAttribute('data-kakao') ?? '';
+        if (!kakaoId) return;
+        try {
+          await navigator.clipboard.writeText(kakaoId);
+          copyKakaoBtn.textContent = '복사 완료';
+        } catch {
+          copyKakaoBtn.textContent = kakaoId;
+        }
+      });
+
+      const reviewsList = document.getElementById('reviews-list');
+      const reviewsToggleBtn = document.getElementById('reviews-toggle-btn');
+      reviewsToggleBtn?.addEventListener('click', () => {
+        if (!reviewsList || !reviewsToggleBtn) return;
+        const expanded = reviewsList.classList.toggle('is-expanded');
+        reviewsToggleBtn.setAttribute('aria-expanded', String(expanded));
+        const label = reviewsToggleBtn.querySelector('span:first-child');
+        const indicator = reviewsToggleBtn.querySelector('.reviews-toggle-indicator');
+        if (label) {
+          label.textContent = expanded ? '인증 후기 전체 8건 표시 중' : '인증 후기 5건 더보기 (전체 8건)';
+        }
+        if (indicator) {
+          indicator.textContent = expanded ? '− 접기' : '+ 펼쳐보기';
+        }
+      });
+
+      const links = Array.from(document.querySelectorAll('[data-section-link]'));
+      const sections = links
+        .map((link) => {
+          const id = link.getAttribute('data-section-link');
+          return id ? document.getElementById(id) : null;
+        })
+        .filter((el): el is HTMLElement => el !== null);
+
+      if (sections.length > 0 && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                links.forEach((l) => l.classList.remove('is-active'));
+                const active = document.querySelector(`[data-section-link="${entry.target.id}"]`);
+                active?.classList.add('is-active');
+              }
+            }
+          },
+          { rootMargin: '-25% 0px -60% 0px', threshold: 0 }
+        );
+        sections.forEach((sec) => observer.observe(sec));
+      }
+    </script>
+  </body>
+</html>
