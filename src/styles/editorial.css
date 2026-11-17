@@ -482,7 +482,7 @@ button {
   flex-direction: column;
   gap: 10px;
   max-width: 340px;
-  margin: 0 auto 32px;
+  margin: 0 auto 12px;
 }
 
 @media (min-width: 560px) {

@@ -42,7 +42,7 @@ export const heroFacts = [
   { label: '자체 교재', value: '평가원 자체 제작 교재 제공' },
   {
     label: '김과외 평판',
-    value: '정규 성사 10건 · 인증 리뷰 8건 전원 5.0 만점 (37.5℃)',
+    value: '정규 성사 10건 · 인증 리뷰 8건 전원 5.0 만점',
     href: 'https://kimstudy.com/tutor/s/5bb888b9-b1a1-4cc0-98eb-6cdac0f45fcd?O3WRXJQK9E=B8882AQA1',
   },
   {
@@ -77,7 +77,7 @@ export const proofMetrics = [
   { num: '10건', label: '김과외 정규 성사 (외부 경력 5건 별도)' },
   { num: '80% (8건)', label: '성사 대비 인증 리뷰 등록률' },
   { num: '5.0 / 5.0', label: '전문성·강의력·준비성·시간 준수 만점' },
-  { num: '37.5℃', label: '김과외 평판 온도' },
+  { num: '상위 2%', label: '김과외 Premium Class 선정' },
 ];
 
 export const proofCases = [
